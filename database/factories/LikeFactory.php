@@ -22,6 +22,7 @@ class LikeFactory extends Factory
         return [
             'user_id' => User::get()->random()->id,
             'post_id' => Post::get()->random()->id,
+            // add check for unique likes
         ];
     }
 }

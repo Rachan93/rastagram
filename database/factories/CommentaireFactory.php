@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class CommentaireFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::get()->random()->id,
+            'post_id' => Post::get()->random()->id,
+            'content' => $this->faker->realTextBetween($minNbChars = 50, $maxNbChars = 144),
+            'date' => $this->faker->dateTimeBetween('-1 month', '+ 1 month'),
         ];
     }
 }

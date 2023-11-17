@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
+
+
+Route::get('/', [/*le chemin complet est nécessaire mais pas fourni dans le cours, il est autocomplete dans phpstorm (ou alors tu mets ctrl+espace comme un chad pour ajouter un import en haut)*/HomepageController::class, 'index']);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

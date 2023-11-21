@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [/*le chemin complet est nécessaire mais pas fourni dans le cours, il est autocomplete dans phpstorm (ou alors tu mets ctrl+espace comme un chad pour ajouter un import en haut)*/HomepageController::class, 'index']);
+    Route::middleware(['auth', 'verified'])->get('/feed', [FeedController::class, 'feed'])->name('feed');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('posts', PostController::class)->except(['index', 'show']);
+});
 
 
 Route::get('/dashboard', function () {
@@ -32,5 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 require __DIR__.'/auth.php';

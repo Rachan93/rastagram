@@ -1,6 +1,6 @@
-<x-guest-layout>
+ <x-guest-layout>
 
-<h1>Liste des post</h1>
+{{-- <h1>Liste des post</h1>
 <ul>
 
 
@@ -8,7 +8,7 @@
         <li>{{ $post->image_url }}</li>
         <li>{{ $post->description }}</li>
     @endforeach
-</ul>
+</ul> --}}
 
 
 </x-guest-layout>

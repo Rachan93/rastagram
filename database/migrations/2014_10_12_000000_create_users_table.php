@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
          /*   $table->date('date_of_birth');*/
             $table->rememberToken();
+            $table->text('bio')->nullable();
             $table->timestamps();
         });
     }

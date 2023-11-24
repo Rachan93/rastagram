@@ -45,9 +45,31 @@
                     @endif
                 </div>
             @endif
+            
+            
+        <div class="mb-4" x-data="{ bio: {{ json_encode(old('bio', $user->bio)) }}, remainingCharacters: 255 - {{ strlen(old('bio', $user->bio)) }} }">
+                
+            <x-input-label for="bio" :value="__('Bio')" />
+
+                <textarea
+                    x-model="bio"
+                    x-on:input="remainingCharacters = 255 - bio.length"
+                    x-bind:maxlength="255"
+                    id="bio"
+                    name="bio"
+                    class="mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    rows="4"
+                ></textarea>
+
+                <p class="text-sm text-gray-600 mt-2">{{ __('Remaining characters: ') }}<span x-text="remainingCharacters"></span></p>
+
+                <x-input-error class="mt-2" :messages="$errors->get('bio')" />
         </div>
 
-        <div class="flex items-center gap-4">
+
+
+        
+<div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')

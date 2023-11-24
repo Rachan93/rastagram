@@ -61,7 +61,7 @@
                     rows="4"
                 ></textarea>
 
-                <p class="text-sm text-gray-600 mt-2">{{ __('Remaining characters: ') }}<span x-text="remainingCharacters"></span></p>
+                <p class="text-sm text-gray-600 mt-2">{{ __('Caractères restants: ') }}<span x-text="remainingCharacters"></span></p>
 
                 <x-input-error class="mt-2" :messages="$errors->get('bio')" />
         </div>

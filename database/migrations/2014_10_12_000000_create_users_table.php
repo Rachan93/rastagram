@@ -21,6 +21,7 @@ return new class extends Migration
          /*   $table->date('date_of_birth');*/
             $table->rememberToken();
             $table->text('bio')->nullable();
+            $table->string('profile_photo')->nullable();
             $table->timestamps();
         });
     }

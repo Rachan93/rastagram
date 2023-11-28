@@ -17,9 +17,56 @@
         </div>
     </div>
 
+    <!-- Comment form -->
+    @auth
+        <form action="{{ route('posts.comments.add', $post->id) }}" method="POST" class="flex bg-white rounded-md shadow p-4 mt-8">
+            @csrf
+            <div class="flex justify-start items-start h-full mr-4">
+                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}'s Avatar" class="h-10 w-10 rounded-full">
+            </div>
+
+            @php
+                $maxCharacters = 255; // You can set this dynamically based on your requirement
+            @endphp
+
+            <div class="flex flex-col justify-center w-full" x-data="{ maxCharacters: {{ $maxCharacters }}, remainingCharacters: {{ $maxCharacters }} - '{{ strlen(old('content')) }}', content: '' }">
+                <div class="text-gray-700">{{ auth()->user()->name }}</div>
+                <div class="text-gray-500 text-sm">{{ auth()->user()->email }}</div>
+                <div class="text-gray-700">
+                    <textarea
+                        name="content"
+                        id="content"
+                        x-on:input="remainingCharacters = maxCharacters - $event.target.value.length"
+                        x-bind:maxlength="maxCharacters"
+                        x-model="content"
+                        placeholder="Votre commentaire"
+                        class="w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-4"
+                    ></textarea>
+                </div>
+                <div class="text-gray-700 mt-2 flex justify-end">
+                    <p class="text-sm text-gray-600">{{ __('Caractères restants: ') }}<span x-text="remainingCharacters"></span></p>
+                    <x-input-error :messages="$errors->get('content')" class="ml-2" />
+                    <x-primary-button type="submit" class="ml-2">
+                        Ajouter un commentaire
+                    </x-primary-button>
+                </div>
+            </div>
+        </form>
+    @else
+        <div class="flex bg-white rounded-md shadow p-4 text-gray-700 justify-between items-center">
+            <span> Vous devez être connecté pour ajouter un commentaire </span>
+            <a
+                href="{{ route('login') }}"
+                class="font-bold bg-white text-gray-700 px-4 py-2 rounded shadow-md"
+            >Se connecter</a>
+        </div>
+    @endauth
+
+    <!-- Comments section -->
     <div class="mt-8">
         <h2 class="font-bold text-xl mb-4">Commentaires</h2>
 
+        <!-- Comments loop -->
         <div class="flex-col space-y-4">
             @forelse ($post->commentaires as $comment)
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
@@ -33,25 +80,10 @@
                         <div class="text-gray-500">
                             {{ $comment->created_at->diffForHumans() }}
                         </div>
-                        <div class="text-gray-700">
+                        <div class="text-gray-700 whitespace-normal overflow-hidden max-h-40 break-all">
                             {{ $comment->content }}
                         </div>
                     </div>
-                </div>
-                <div class="flex justify-center">
-                    @can('delete', $comment)
-                        <button
-                            x-data="{ id: {{ $comment->id }} }"
-                            x-on:click.prevent="window.selected = id; $dispatch('open-modal', 'confirm-comment-deletion');"
-                            type="submit"
-                            class="font-bold bg-white text-gray-700 px-4 py-2 rounded shadow"
-                        ></button>
-                    @endcan
-                </div>
-                <div class="flex flex-col justify-center w-full text-gray-700">
-                    <p class="border bg-gray-100 rounded-md p-4">
-                        {{ $comment->content }}
-                    </p>
                 </div>
             @empty
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
@@ -61,55 +93,4 @@
         </div>
     </div>
 
-    @auth
-        <form
-            action="{{ route('posts.comments.add', $post) }}"
-            method="POST"
-            class="flex bg-white rounded-md shadow p-4"
-        >
-            @csrf
-            <div class="flex justify-start items-start h-full mr-4">
-                <x-avatar class="h-10 w-10" :user="auth()->user()" />
-            </div>
-            <div class="flex flex-col justify-center w-full">
-                <div class="text-gray-700">{{ auth()->user()->name }}</div>
-                <div class="text-gray-500 text-sm">{{ auth()->user()->email }}</div>
-                <div class="text-gray-700">
-                    <textarea
-                        name="body"
-                        id="body"
-                        rows="4"
-                        placeholder="Votre commentaire"
-                        class="w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-4"
-                    ></textarea>
-                </div>
-                <div class="text-gray-700 mt-2 flex justify-end">
-                    <button
-                        type="submit"
-                        class="font-bold bg-white text-gray-700 px-4 py-2 rounded shadow"
-                    >
-                        Ajouter un commentaire
-                    </button>
-                </div>
-            </div>
-        </form>
-    @else
-        <div
-            class="flex bg-white rounded-md shadow p-4 text-gray-700 justify-between items-center"
-        >
-            <span> Vous devez être connecté pour ajouter un commentaire </span>
-            <a
-                href="{{ route('login') }}"
-                class="font-bold bg-white text-gray-700 px-4 py-2 rounded shadow-md"
-            >Se connecter</a
-            >
-        </div>
-    @endauth
-<!-- Add a new comment -->
-            <!-- Formulaire d'ajout de commentaire -->
-            <form action="{{ route('posts.comments.add', $post->id) }}" method="POST">
-                @csrf
-                <textarea name="content" rows="3" class="w-full border p-2" placeholder="Write a comment"></textarea>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 mt-2">Post Comment</button>
-            </form>
 </x-user-layout>

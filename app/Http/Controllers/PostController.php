@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Requests;
-use App\Http\Requests\PostStoreRequest; 
-use App\Http\Requests\PostUpdateRequest; 
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 
 // class PostController extends Controller
@@ -42,7 +42,7 @@ class PostController extends Controller
         ]
     );
     }
-    
+
 
 //     /**
 //      * Show the form for creating a new resource.
@@ -81,7 +81,7 @@ public function show($id)
     ]);
 }
 
-    
+
      /* Show the form for editing the specified resource.
      */
     public function edit(Post $post)
@@ -91,16 +91,16 @@ public function show($id)
 
 public function update(PostUpdateRequest $request, Post $post)
 {
-   
+
     $post->description = $request->validated()['description'];
     $post->image_url = $request->validated()['image_url'];
     $post->localisation = $request->validated()['localisation'];
     $post->date = $request->validated()['date'];
     $post->save();
-   
+
 
     return redirect()->route('posts.index');
-    
+
 }
 }
 //     /**

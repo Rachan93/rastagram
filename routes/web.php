@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomepageController;
-use App\Http\Controllers\FeedController;
+//use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\Route;
 // Homepage
 Route::get('/', [HomepageController::class, 'index']);
 
-// Feed 
+// Feed
 //Route::middleware(['auth', 'verified'])->get('/feed', [FeedController::class, 'feed'])->name('feed');
 
-// Unified Post Routes
+// Post
 Route::middleware(['auth'])->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit'); 
+    Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');  
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 

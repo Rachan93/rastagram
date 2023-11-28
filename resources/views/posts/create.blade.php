@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('posts.store') }}" class="flex flex-col space-y-4 text-gray-500">
+            <form method="POST" action="{{ route('posts.store') }}" class="flex flex-col space-y-4 text-gray-500" enctype="multipart/form-data">
 
                 @csrf
 

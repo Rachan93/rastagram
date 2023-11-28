@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentStoreRequest;
 use App\Models\Post;
 use Illuminate\Http\Requests;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
+use App\Models\Commentaire;
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 
 // class PostController extends Controller
@@ -72,14 +76,43 @@ public function create()
 //     /**
 //      * Display the specified resource.
 //      */
-public function show($id)
+/*public function show($id)
 {
     $post = Post::findOrFail($id);
 
     return view('posts.show', [
         'post' => $post,
     ]);
-}
+
+}*/
+
+    public function show($id){
+
+        $post = Post::findOrFail($id);
+
+
+
+
+
+        // Load the comments for the post, including the associated user
+        $comments = $post->commentaires()
+
+            ->with('user')
+
+            ->orderBy('created_at')
+
+            ->get();
+
+
+        return view('posts.show', [
+
+            'post' => $post,
+
+            'comments' => $comments,
+
+        ]);
+
+    }
 
 
      /* Show the form for editing the specified resource.
@@ -102,6 +135,41 @@ public function update(PostUpdateRequest $request, Post $post)
     return redirect()->route('posts.index');
 
 }
+public function addComment(CommentStoreRequest $request, Post $post)
+{
+    // Le reste de votre code pour créer et sauvegarder le commentaire
+    $comment = new Commentaire([
+        'content' => $request->validated()['content'],
+        'user_id' => Auth::id(),
+    ]);
+
+    $post->commentaires()->save($comment);
+
+    return redirect()->route('posts.show', $post->id);
+}
+
+/*public function addComment(Request $request, Post $post)
+{
+    dd($request->all);
+    // Ensure that the user is authenticated
+    $request->validate([
+
+        'content' => 'required|string|max:255',
+    ]);
+
+    // Create a new comment associated with the post
+    $comment = $post->commentaires()->make();
+
+    // Set the comment body and user_id
+    $comment->content = $request->input('content');
+    $comment->user_id = auth()->user()->id;
+
+    // Save the comment
+    $comment->save();
+
+    // Redirect back to the post
+    return redirect()->back();
+}*/
 }
 //     /**
 //      * Remove the specified resource from storage.

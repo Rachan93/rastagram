@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard'; // changer en /feed pour rediriger sur feed
+    public const HOME = '/posts'; // changer en /posts pour rediriger sur posts
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

@@ -1,48 +1,46 @@
 <?php
 
-use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomepageController;
+//use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Homepage
+Route::get('/', [HomepageController::class, 'index']);
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+// Feed
+//Route::middleware(['auth', 'verified'])->get('/feed', [FeedController::class, 'feed'])->name('feed');
 
-
-Route::get('/', [/*le chemin complet est nécessaire mais pas fourni dans le cours, il est autocomplete dans phpstorm (ou alors tu mets ctrl+espace comme un chad pour ajouter un import en haut)*/HomepageController::class, 'index']);
-    Route::middleware(['auth', 'verified'])->get('/feed', [FeedController::class, 'feed'])->name('feed');
-
-
+// Post
 Route::middleware(['auth'])->group(function () {
-    Route::resource('posts', PostController::class)->except(['index', 'show']);
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    // Comment
+    Route::post('/posts/{post}/comments', [PostController::class, 'addComment'])->name('posts.comments.add');
+
 });
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
+// Dashboard
+Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+// Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
 });
 
-
-
+// Auth Routes
 require __DIR__.'/auth.php';

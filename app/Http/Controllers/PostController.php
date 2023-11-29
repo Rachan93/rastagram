@@ -9,21 +9,9 @@ use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Commentaire;
 use Illuminate\Http\Request;
-
+use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
-
-// class PostController extends Controller
-// {
-//     public function posts()
-//     {
-//         $posts = Post::all();
-
-//         return view('posts.index', [
-//             'posts' => $posts,
-//         ]);
-//     }
-// }
-
+use Illuminate\Database\Eloquent\Builder;
 
 
 
@@ -33,20 +21,40 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $posts = Post::orderByDesc('updated_at')
-        ->paginate(10)
-    ;
 
-    return view(
-        'posts.index',
-        [
-            'posts' => $posts,
-        ]
-    );
+     public function index(Request $request)
+{
+    // Get all posts with user information
+    $posts = Post::with('user');
+
+    // If there is a search term, apply search filters
+    if ($request->has('search')) {
+        $searchTerm = $request->query('search');
+        $posts->where(function ($query) use ($searchTerm) {
+            $query->where('description', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhereHas('user', function ($userQuery) use ($searchTerm) {
+                    $userQuery->where('name', 'LIKE', '%' . $searchTerm . '%');
+                })
+                ->orWhere('localisation', 'LIKE', '%' . $searchTerm . '%');
+        });
     }
 
+    // Get the IDs of followed users
+$followedUserIds = auth()->user()->following()->pluck('users.id')->toArray();
+
+// Include posts from followed users and the authenticated user, order by custom criteria
+$posts->orderByRaw("FIELD(user_id, " . implode(',', $followedUserIds) . ") DESC")
+      ->orderByDesc('updated_at');
+
+
+    // Paginate the results
+    $posts = $posts->paginate(10);
+
+    return view('posts.index', [
+        'posts' => $posts,
+    ]);
+}
+    
 
 //     /**
 //      * Show the form for creating a new resource.
@@ -76,15 +84,8 @@ public function create()
 //     /**
 //      * Display the specified resource.
 //      */
-/*public function show($id)
-{
-    $post = Post::findOrFail($id);
 
-    return view('posts.show', [
-        'post' => $post,
-    ]);
 
-}*/
 
     public function show($id){
 
@@ -170,7 +171,7 @@ public function addComment(CommentStoreRequest $request, Post $post)
     // Redirect back to the post
     return redirect()->back();
 }*/
-}
+
 //     /**
 //      * Remove the specified resource from storage.
 //      */
@@ -180,3 +181,24 @@ public function addComment(CommentStoreRequest $request, Post $post)
 //     }
 
 // }
+
+
+public function like(Post $post)
+{
+    auth()->user()->likes()->create(['post_id' => $post->id]);
+
+    return back();
+}
+
+public function unlike(Post $post)
+{
+    auth()->user()->likes()->where('post_id', $post->id)->delete();
+
+    return back();
+}
+
+
+ 
+
+
+}

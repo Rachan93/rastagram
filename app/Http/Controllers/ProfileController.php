@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,36 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+//profils publics
+    public function show(User $user): View
+    {
+        // Les articles publiés par l'utilisateur
+        $posts = $user
+            ->posts()
+           // ->where('published_at', '<', now())
+            ->withCount('commentaires')
+            ->orderByDesc('created_at')
+            ->get()
+        ;
+    
+        // Les commentaires de l'utilisateur triés par date de création
+        $commentaires = $user
+            ->comments()
+            ->orderByDesc('created_at')
+            ->get()
+        ;
+    
+        // On renvoie la vue avec les données
+        return view('profile.show', [
+            'user' => $user,
+            'posts' => $posts,
+            'commentaires' => $commentaires,
+        ]);
+    }
+
+
+
+
     /**
      * Display the user's profile form.
      */
@@ -80,4 +111,22 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
+
+
+    public function follow(User $user)
+    {
+        auth()->user()->following()->attach($user);
+
+        return back();
+    }
+
+    public function unfollow(User $user)
+    {
+        auth()->user()->following()->detach($user);
+
+        return back();
+    }
+
 }

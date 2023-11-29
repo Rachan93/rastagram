@@ -1,5 +1,4 @@
 <x-user-layout>
-
     <div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">
         <h2 class="text-2xl font-semibold mb-4">{{ $post->description }}</h2>
 
@@ -7,13 +6,51 @@
             <img src="{{ $post->image_url }}" alt="{{ $post->description }}" class="w-full h-auto rounded-md">
         </div>
 
-        <p class="text-gray-700">{{ $post->user->name }}</p>
-        <p class="text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="{{ route('profile.show', $post->user) }}" class="text-gray-700">
+                    <x-avatar class="h-8 w-8" :user="$post->user" />
+                    {{ $post->user->name }}
+                </a>
+            </div>
+            <div class="text-gray-500">
+                {{ $post->created_at->diffForHumans() }}
+            </div>
+        </div>
 
-        {{-- Add other details you want to display about the post --}}
+        <p class="text-gray-700">{{ $post->localisation }}</p>
+        <p class="text-gray-700">{{ $post->date }}</p>
+
+        <!-- Display Like Count -->
+        <p>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
+
+        <!-- Like/Unlike Buttons -->
+        @auth
+            @if (!$post->likedBy(auth()->user()))
+                <form action="{{ route('posts.like', $post) }}" method="post">
+                    @csrf
+                    <button type="submit">Like</button>
+                </form>
+            @else
+                <form action="{{ route('posts.unlike', $post) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Unlike</button>
+                </form>
+            @endif
+        @endauth
+
+        <!-- Edit button for the post owner -->
+        @auth
+            @if(auth()->user()->id == $post->user->id)
+                <div class="mt-4">
+                    <a href="{{ route('posts.edit', $post) }}" class="text-blue-500 hover:underline">Modifier le post</a>
+                </div>
+            @endif
+        @endauth
 
         <div class="mt-8">
-            <a href="{{ route('posts.index') }}" class="text-blue-500 hover:underline">Back to Posts</a>
+            <a href="{{ route('posts.index') }}" class="text-blue-500 hover:underline">Retour au feed</a>
         </div>
     </div>
 
@@ -26,7 +63,7 @@
             </div>
 
             @php
-                $maxCharacters = 255; // You can set this dynamically based on your requirement
+                $maxCharacters = 255; 
             @endphp
 
             <div class="flex flex-col justify-center w-full" x-data="{ maxCharacters: {{ $maxCharacters }}, remainingCharacters: {{ $maxCharacters }} - '{{ strlen(old('content')) }}', content: '' }">
@@ -70,12 +107,12 @@
         <div class="flex-col space-y-4">
             @forelse ($post->commentaires as $comment)
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
-                    <div class="flex justify-start items-start h-full">
+                    <a href="{{ route('profile.show', $comment->user) }}" class="flex justify-start items-start h-full">
                         <img src="{{ asset($comment->user->profile_photo) }}" alt="{{ $comment->user->name }}'s profile photo" class="w-6 h-6 rounded-full">
-                    </div>
+                    </a>
                     <div class="flex flex-col justify-center">
                         <div class="text-gray-700">
-                            {{ $comment->user->name }}
+                            <a href="{{ route('profile.show', $comment->user) }}" class="text-gray-700">{{ $comment->user->name }}</a>
                         </div>
                         <div class="text-gray-500">
                             {{ $comment->created_at->diffForHumans() }}
@@ -92,5 +129,4 @@
             @endforelse
         </div>
     </div>
-
 </x-user-layout>

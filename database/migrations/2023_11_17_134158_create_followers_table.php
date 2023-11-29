@@ -11,19 +11,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('followers', function (Blueprint $table) {
-            $table->id();
-                $table->unsignedBigInteger('follower_id');
-                $table->unsignedBigInteger('following_id');
-                $table->unique(['follower_id', 'following_id']);
-                $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
-                $table->foreign('following_id')->references('id')->on('users')->onDelete('cascade');
-                $table->timestamps();
-            });
-
-    }
+    public function up()
+{
+    Schema::create('followers', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('follower_id')->constrained('users')->onDelete('cascade');
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

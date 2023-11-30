@@ -31,31 +31,40 @@
         </div>
     </div>
     
-    <div class="mt-8">
-        <h2 class="font-bold text-xl mb-4">Articles</h2>
-        <ul class="grid sm:grid-cols-2 gap-8">
-            @forelse ($posts as $post)
-                <li>
-                    <a href="{{ route('posts.show', $post) }}" class="hover:underline">
-                        <div class="flex bg-white rounded-md shadow p-5 space-x-4">
-                            <div>
-                                <img src="{{ $post->image_url }}" alt="{{ $post->description }}" class="w-20 h-20 rounded-md">
-                            </div>
-                            <div class="flex flex-col">
-                                <div class="text-gray-800 font-bold">{{ $post->description }}</div>
-                                <div class="text-gray-500 text-sm">{{ $post->created_at->diffForHumans() }}</div>
-                                <div class="text-gray-500 text-xs">
-                                    {{ $post->commentaires_count }} Commentaire(s)
-                                </div>
-                            </div>
+<!-- Profile Post Gallery -->
+<div class="mt-8">
+    <h2 class="font-bold text-xl mb-4">Articles</h2>
+    <ul class="grid sm:grid-cols-1 lg:grid-cols-1 2xl:grid-cols-2 gap-4 justify-center">
+        @forelse ($posts as $post)
+            <li class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md"> <!-- Adjust the width here -->
+                <a class="block bg-white rounded-md shadow-md p-2 hover:shadow-lg hover:scale-105 transition" href="{{ route('posts.show', $post) }}">
+                    <div class="relative overflow-hidden rounded-md aspect-w-1 aspect-h-1">
+                        <img src="{{ asset('storage/' . $post->image_url) }}" alt="{{ $post->description }}" class="object-cover w-full h-full rounded-md">
+                    </div>
+                    <div class="flex items-center justify-between mt-2">
+                        <div class="flex items-center">
+                            <!-- You can customize the avatar component here -->
+                            <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="h-6 w-6 rounded-full">
+                            <span class="text-gray-700 ml-2 text-sm">{{ $post->user->name }}</span>
                         </div>
-                    </a>
-                </li>
-            @empty
-                <div class="text-gray-700">Aucun article</div>
-            @endforelse
-        </ul>
-    </div>
+                        <span class="text-gray-500 text-sm">{{ $post->created_at->diffForHumans() }}</span>
+                    </div>
+                    <p class="text-gray-700 mt-1 text-sm">{{ $post->description }}</p>
+                    <p class="text-gray-700 text-sm">{{ $post->localisation }}</p>
+                    <p class="text-gray-700 text-sm">{{ $post->date }}</p>
+                    <!-- Display Comment Count -->
+                    <p class="text-gray-700 text-sm">{{ $post->commentaires_count }} {{ Str::plural('Commentaire', $post->commentaires_count) }}</p>
+                </a>
+            </li>
+        @empty
+            <div class="text-gray-700">Aucun article</div>
+        @endforelse
+    </ul>
+</div>
+
+
+
+
 
     <div class="mt-8">
         <h2 class="font-bold text-xl mb-4">Commentaires</h2>
@@ -89,7 +98,7 @@
                         </div>
                         <div class="flex flex-col justify-center w-full text-gray-700">
                             <p class="border bg-gray-100 rounded-md p-4">
-                                {{ $comment->body }}
+                                {{ $comment->content }}
                             </p>
                         </div>
                     </div>
@@ -100,6 +109,7 @@
                 </div>
             @endforelse
         </div>
+       
 
         <x-modal name="confirm-comment-deletion" focusable>
             <form

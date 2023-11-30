@@ -30,6 +30,7 @@ class ProfileController extends Controller
             ->orderByDesc('created_at')
             ->get()
         ;
+        //dd($commentaires);
     
         // On renvoie la vue avec les données
         return view('profile.show', [
@@ -37,6 +38,7 @@ class ProfileController extends Controller
             'posts' => $posts,
             'commentaires' => $commentaires,
         ]);
+      
     }
 
 

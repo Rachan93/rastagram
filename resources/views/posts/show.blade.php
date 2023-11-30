@@ -3,7 +3,8 @@
         <h2 class="text-2xl font-semibold mb-4">{{ $post->description }}</h2>
 
         <div class="mb-4">
-            <img src="{{ $post->image_url }}" alt="{{ $post->description }}" class="w-full h-auto rounded-md">
+        <img src="{{ asset('storage/' . $post->image_url) }}" alt="{{ $post->description }}" class="w-full h-auto rounded-md">
+
         </div>
 
         <div class="flex items-center justify-between">

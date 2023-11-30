@@ -14,7 +14,7 @@ class LikeSeeder extends Seeder
     public function run(): void
     {
         Like::factory()
-        ->count(250)
+        ->count(60)
         ->create();
     }
 }

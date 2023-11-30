@@ -28,24 +28,33 @@
     </div>
 
     
+<!-- Post Listing -->
+<ul class="grid sm:grid-cols-1 lg:grid-cols-1 2xl:grid-cols-1 gap-4 justify-center">
+    @foreach($posts as $post)
+        <li class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md"> <!-- Adjust the width here -->
+            <a class="block bg-white rounded-md shadow-md p-2 hover:shadow-lg hover:scale-105 transition" href="{{ route('posts.show', $post) }}">
+                <div class="relative overflow-hidden rounded-md aspect-w-1 aspect-h-1">
+                    <img src="{{ asset('storage/' . $post->image_url) }}" alt="{{ $post->description }}" class="object-cover w-full h-full rounded-md">
+                </div>
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center">
+                        <x-avatar class="h-6 w-6" :user="$post->user" />
+                        <span class="text-gray-700 ml-2 text-sm">{{ $post->user->name }}</span>
+                    </div>
+                    <span class="text-gray-500 text-sm">{{ $post->created_at->diffForHumans() }}</span>
+                </div>
+                <p class="text-gray-700 mt-1 text-sm">{{ $post->description }}</p>
+                <p class="text-gray-700 text-sm">{{ $post->localisation }}</p>
+                <p class="text-gray-700 text-sm">{{ $post->date }}</p>
+                <!-- Display Like Count -->
+                <p class="text-gray-700 text-sm">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
+            </a>
+        </li>
+    @endforeach
+</ul>
 
-    <!-- Post Listing -->
-    <ul class="grid sm:grid-cols-1 lg:grid-cols-1 2xl:grid-cols-1 justify-center">
-        @foreach($posts as $post)
-            <li class="mb-4">  
-                <a class="flex bg-white rounded-md shadow-md p-5 mx-auto max-w-screen-md w-full hover:shadow-lg hover:scale-105 transition"
-                   href="{{ route('posts.show', $post) }}">
-            
-                    {{ $post->user->name }}
-                    <br>
-                    {{ $post->image_url }}
-                    {{ $post->description }}
-                    {{ $post->localisation }}
-                    {{ $post->date }}
-                </a>
-            </li>
-        @endforeach
-    </ul>
+
+
 
     <div class="mt-8">
         {{ $posts->links() }}

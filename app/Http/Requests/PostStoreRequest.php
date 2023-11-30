@@ -26,9 +26,10 @@ class PostStoreRequest extends FormRequest
         return [
             'description' => 'required|max:255',
             'localisation' => 'nullable|string|max:50',
-            'image_url' => 'required|max:100',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
             'date' => 'nullable|date',
         ];
     }
 }
+
 //dans le cours il est dit de créer ArticleCreateRequest mais après il est nommé ArticleStoreRequest ?

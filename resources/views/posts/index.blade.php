@@ -48,6 +48,12 @@
                 <p class="text-gray-700 text-sm">{{ $post->date }}</p>
                 <!-- Display Like Count -->
                 <p class="text-gray-700 text-sm">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
+                @if($post->comments)
+                    <p class="text-gray-700 text-sm">{{ $post->comments->count() }} {{ Str::plural('comment', $post->comments->count()) }}</p>
+                @else
+                    <p class="text-gray-700 text-sm">0 comments</p>
+                @endif
+            </a>
             </a>
         </li>
     @endforeach

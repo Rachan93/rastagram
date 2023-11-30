@@ -15,26 +15,28 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    
 
-  
 
-   
 
-     
+
+
+
+
 
      public function index(Request $request)
      {
          // Get the IDs of followed users
          $followedUserIds = auth()->user()->following()->pluck('users.id')->toArray();
      
-         // Fetch all posts with an additional column for like_count
+         // Fetch all posts with an additional column for like_count and comments
          $posts = Post::leftJoin('likes', 'posts.id', '=', 'likes.post_id')
+             ->with('comments') // Eager load comments
              ->select(
                  'posts.*',
                  DB::raw('COUNT(likes.id) AS like_count'),
@@ -113,35 +115,6 @@ class PostController extends Controller
          ]);
      }
      
-     
-     
-     
-    
-    
-
-     
-     
-     
-     
-
-     
-     
-
-     
-     
-     
-
-     
-
-     
-     
-
-
-
-
-
-
-
     //     /**
     //      * Show the form for creating a new resource.
     //      */

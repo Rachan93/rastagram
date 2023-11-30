@@ -36,7 +36,7 @@
     <h2 class="font-bold text-xl mb-4">Articles</h2>
     <ul class="grid sm:grid-cols-1 lg:grid-cols-1 2xl:grid-cols-2 gap-4 justify-center">
         @forelse ($posts as $post)
-            <li class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md"> <!-- Adjust the width here -->
+            <li class="w-full max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md"> <!-- Adjust the width here -->
                 <a class="block bg-white rounded-md shadow-md p-2 hover:shadow-lg hover:scale-105 transition" href="{{ route('posts.show', $post) }}">
                     <div class="relative overflow-hidden rounded-md aspect-w-1 aspect-h-1">
                         <img src="{{ asset('storage/' . $post->image_url) }}" alt="{{ $post->description }}" class="object-cover w-full h-full rounded-md">
@@ -53,7 +53,7 @@
                     <p class="text-gray-700 text-sm">{{ $post->localisation }}</p>
                     <p class="text-gray-700 text-sm">{{ $post->date }}</p>
                     <!-- Display Comment Count -->
-                    <p class="text-gray-700 text-sm">{{ $post->commentaires_count }} {{ Str::plural('Commentaire', $post->commentaires_count) }}</p>
+                    <p class="text-gray-700 text-sm">{{ $post->comments_count }} {{ Str::plural('Comment', $post->comments_count) }}</p>
                 </a>
             </li>
         @empty
@@ -67,10 +67,10 @@
 
 
     <div class="mt-8">
-        <h2 class="font-bold text-xl mb-4">Commentaires</h2>
+        <h2 class="font-bold text-xl mb-4">Comments</h2>
 
         <div class="flex-col space-y-4">
-            @forelse ($commentaires as $comment)
+            @forelse ($comments as $comment)
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
                     <div class="flex justify-start items-start h-full">
                         <x-avatar class="h-10 w-10" :user="$comment->user" />
@@ -105,7 +105,7 @@
                 </div>
             @empty
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
-                    Aucun commentaire pour l'instant
+                    Aucun comment pour l'instant
                 </div>
             @endforelse
         </div>
@@ -119,7 +119,7 @@
             >
                 @csrf @method('DELETE')
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Êtes-vous sûr de vouloir supprimer ce commentaire ?
+                    Êtes-vous sûr de vouloir supprimer ce comment ?
                 </h2>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     Cette action est irréversible. Toutes les données seront supprimées.

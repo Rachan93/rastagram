@@ -77,7 +77,7 @@
                         x-on:input="remainingCharacters = maxCharacters - $event.target.value.length"
                         x-bind:maxlength="maxCharacters"
                         x-model="content"
-                        placeholder="Votre commentaire"
+                        placeholder="Votre comment"
                         class="w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-4"
                     ></textarea>
                 </div>
@@ -85,14 +85,14 @@
                     <p class="text-sm text-gray-600">{{ __('Caractères restants: ') }}<span x-text="remainingCharacters"></span></p>
                     <x-input-error :messages="$errors->get('content')" class="ml-2" />
                     <x-primary-button type="submit" class="ml-2">
-                        Ajouter un commentaire
+                        Ajouter un comment
                     </x-primary-button>
                 </div>
             </div>
         </form>
     @else
         <div class="flex bg-white rounded-md shadow p-4 text-gray-700 justify-between items-center">
-            <span> Vous devez être connecté pour ajouter un commentaire </span>
+            <span> Vous devez être connecté pour ajouter un comment </span>
             <a
                 href="{{ route('login') }}"
                 class="font-bold bg-white text-gray-700 px-4 py-2 rounded shadow-md"
@@ -102,11 +102,11 @@
 
     <!-- Comments section -->
     <div class="mt-8">
-        <h2 class="font-bold text-xl mb-4">Commentaires</h2>
+        <h2 class="font-bold text-xl mb-4">Comments</h2>
 
         <!-- Comments loop -->
         <div class="flex-col space-y-4">
-            @forelse ($post->commentaires as $comment)
+            @forelse ($post->comments as $comment)
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
                     <a href="{{ route('profile.show', $comment->user) }}" class="flex justify-start items-start h-full">
                         <img src="{{ asset($comment->user->profile_photo) }}" alt="{{ $comment->user->name }}'s profile photo" class="w-6 h-6 rounded-full">
@@ -125,7 +125,7 @@
                 </div>
             @empty
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
-                    Aucun commentaire pour l'instant
+                    Aucun comment pour l'instant
                 </div>
             @endforelse
         </div>

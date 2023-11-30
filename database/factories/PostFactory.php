@@ -29,7 +29,7 @@ class PostFactory extends Factory
 
         return [
             'user_id' => User::get()->random()->id,
-            'description' => $this->faker->realTextBetween($minNbChars = 100, $maxNbChars = 255),
+            'description' => $this->faker->realTextBetween($minNbChars = 1, $maxNbChars = 50),
             //'image_url' => $this->faker->imageUrl(640, 480, 'cats', true),    pour des url vers placeholders externes
             'image_url' => $this->faker->randomElement($placeholderImages), // pour placeholders internes
             'localisation' => $this->faker->city,

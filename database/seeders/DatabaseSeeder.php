@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         $this->call(PostSeeder::class);
-        $this->call(CommentaireSeeder::class);
+        $this->call(CommentSeeder::class);
         $this->call(LikeSeeder::class);
        // $this->call(FollowerSeeder::class);
 

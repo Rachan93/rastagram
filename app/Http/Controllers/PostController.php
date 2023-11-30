@@ -7,7 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Requests;
 use App\Http\Requests\PostStoreRequest;
 use App\Http\Requests\PostUpdateRequest;
-use App\Models\Commentaire;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
@@ -164,7 +164,7 @@ class PostController extends Controller
 
 
         // Load the comments for the post, including the associated user
-        $comments = $post->commentaires()
+        $comments = $post->comments()
 
             ->with('user')
 
@@ -214,13 +214,13 @@ class PostController extends Controller
 
     public function addComment(CommentStoreRequest $request, Post $post)
     {
-        // Le reste de votre code pour créer et sauvegarder le commentaire
-        $comment = new Commentaire([
+        // Le reste de votre code pour créer et sauvegarder le comment
+        $comment = new Comment([
             'content' => $request->validated()['content'],
             'user_id' => Auth::id(),
         ]);
 
-        $post->commentaires()->save($comment);
+        $post->comments()->save($comment);
 
         return redirect()->route('posts.show', $post->id);
     }
@@ -235,7 +235,7 @@ class PostController extends Controller
     ]);
 
     // Create a new comment associated with the post
-    $comment = $post->commentaires()->make();
+    $comment = $post->comments()->make();
 
     // Set the comment body and user_id
     $comment->content = $request->input('content');

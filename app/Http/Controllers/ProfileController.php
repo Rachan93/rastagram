@@ -19,24 +19,24 @@ class ProfileController extends Controller
         $posts = $user
             ->posts()
            // ->where('published_at', '<', now())
-            ->withCount('commentaires')
+            ->withCount('comments')
             ->orderByDesc('created_at')
             ->get()
         ;
     
-        // Les commentaires de l'utilisateur triés par date de création
-        $commentaires = $user
+        // Les comments de l'utilisateur triés par date de création
+        $comments = $user
             ->comments()
             ->orderByDesc('created_at')
             ->get()
         ;
-        //dd($commentaires);
+        //dd($comments);
     
         // On renvoie la vue avec les données
         return view('profile.show', [
             'user' => $user,
             'posts' => $posts,
-            'commentaires' => $commentaires,
+            'comments' => $comments,
         ]);
       
     }

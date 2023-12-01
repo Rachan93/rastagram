@@ -33,7 +33,7 @@
     
 <!-- Profile Post Gallery -->
 <div class="mt-8">
-    <h2 class="font-bold text-xl mb-4">Articles</h2>
+    <h2 class="font-bold text-xl mb-4">Posts de {{ $user->name }}</h2>
     <ul class="grid sm:grid-cols-1 lg:grid-cols-1 2xl:grid-cols-2 gap-4 justify-center">
         @forelse ($posts as $post)
             <li class="w-full max-w-2xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md"> <!-- Adjust the width here -->
@@ -57,7 +57,7 @@
                 </a>
             </li>
         @empty
-            <div class="text-gray-700">Aucun article</div>
+            <div class="text-gray-700">Aucun post</div>
         @endforelse
     </ul>
 </div>

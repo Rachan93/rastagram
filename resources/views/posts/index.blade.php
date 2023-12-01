@@ -49,9 +49,9 @@
                 <!-- Display Like Count -->
                 <p class="text-gray-700 text-sm">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
                 @if($post->comments)
-                    <p class="text-gray-700 text-sm">{{ $post->comments->count() }} {{ Str::plural('comment', $post->comments->count()) }}</p>
+                    <p class="text-gray-700 text-sm">{{ $post->comments->count() }} {{ Str::plural('commentaire', $post->comments->count()) }}</p>
                 @else
-                    <p class="text-gray-700 text-sm">Aucun commentaire</p>
+                    <p class="text-gray-700 text-sm">0 commentaires</p>
                 @endif
             </a>
             </a>

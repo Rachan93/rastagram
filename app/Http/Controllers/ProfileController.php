@@ -20,7 +20,7 @@ class ProfileController extends Controller
             ->posts()
            // ->where('published_at', '<', now())
             ->withCount('comments')
-            ->orderByDesc('created_at')
+            ->orderBy('created_at')
             ->get()
         ;
     

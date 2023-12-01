@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <a href="{{ route('profile.show', $post->user) }}" class="text-gray-700">
-                    <x-avatar class="h-8 w-8" :user="$post->user" />
+                    <x-avatar class="h-8 w-8" :user="$post->user" /> 
                     {{ $post->user->name }}
                 </a>
             </div>
@@ -60,7 +60,7 @@
         <form action="{{ route('posts.comments.add', $post->id) }}" method="POST" class="flex bg-white rounded-md shadow p-4 mt-8">
             @csrf
             <div class="flex justify-start items-start h-full mr-4">
-                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}'s Avatar" class="h-10 w-10 rounded-full">
+            <x-avatar class="h-8 w-8" :user="auth()->user()" /> 
             </div>
 
             @php
@@ -109,7 +109,7 @@
             @forelse ($post->comments as $comment)
                 <div class="flex bg-white rounded-md shadow p-4 space-x-4">
                     <a href="{{ route('profile.show', $comment->user) }}" class="flex justify-start items-start h-full">
-                        <img src="{{ asset($comment->user->profile_photo) }}" alt="{{ $comment->user->name }}'s profile photo" class="w-6 h-6 rounded-full">
+                    <x-avatar class="h-8 w-8" :user="$comment->user" />  
                     </a>
                     <div class="flex flex-col justify-center">
                         <div class="text-gray-700">

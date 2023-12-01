@@ -38,7 +38,7 @@
                 </div>
                 <div class="flex items-center justify-between mt-2">
                     <div class="flex items-center">
-                        <x-avatar class="h-6 w-6" :user="$post->user" />
+                        <x-avatar class="h-8 w-8" :user="$post->user" />
                         <span class="text-gray-700 ml-2 text-sm">{{ $post->user->name }}</span>
                     </div>
                     <span class="text-gray-500 text-sm">{{ $post->created_at->diffForHumans() }}</span>

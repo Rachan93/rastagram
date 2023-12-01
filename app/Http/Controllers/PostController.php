@@ -168,7 +168,7 @@ class PostController extends Controller
 
             ->with('user')
 
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
 
             ->get();
 
@@ -224,39 +224,6 @@ class PostController extends Controller
 
         return redirect()->route('posts.show', $post->id);
     }
-
-    /*public function addComment(Request $request, Post $post)
-{
-    dd($request->all);
-    // Ensure that the user is authenticated
-    $request->validate([
-
-        'content' => 'required|string|max:255',
-    ]);
-
-    // Create a new comment associated with the post
-    $comment = $post->comments()->make();
-
-    // Set the comment body and user_id
-    $comment->content = $request->input('content');
-    $comment->user_id = auth()->user()->id;
-
-    // Save the comment
-    $comment->save();
-
-    // Redirect back to the post
-    return redirect()->back();
-}*/
-
-    //     /**
-    //      * Remove the specified resource from storage.
-    //      */
-    //     public function destroy(Post $post)
-    //     {
-    //         //
-    //     }
-
-    // }
 
 
     public function like(Post $post)

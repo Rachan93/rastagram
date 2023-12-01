@@ -1,6 +1,6 @@
 <div {{ $attributes->merge(['class' => 'rounded-full overflow-hidden']) }}>
-    @if ($user->avatar_path)
-        <img class=" aspect-square object-cover object-center" src="{{ asset('storage/' . $user->avatar_path) }}"
+    @if ($user->profile_photo)
+        <img class=" aspect-square object-cover object-center" src="{{ asset('storage/' . $user->profile_photo) }}"
             alt="{{ $user->name }}" />
     @else
         <div class="flex items-center justify-center bg-indigo-100">

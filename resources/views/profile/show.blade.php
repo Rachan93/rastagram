@@ -44,7 +44,7 @@
                     <div class="flex items-center justify-between mt-2">
                         <div class="flex items-center">
                             <!-- You can customize the avatar component here -->
-                            <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="h-6 w-6 rounded-full">
+                            <x-avatar class="h-8 w-8" :user="$post->user" />
                             <span class="text-gray-700 ml-2 text-sm">{{ $post->user->name }}</span>
                         </div>
                         <span class="text-gray-500 text-sm">{{ $post->created_at->diffForHumans() }}</span>

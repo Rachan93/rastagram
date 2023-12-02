@@ -15,42 +15,31 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col pt-6 sm:pt-0 bg-gray-100">
-        <div class="container mx-auto flex flex-col space-y-10">
-            <nav class="flex justify-between items-center py-2">
-                <div>
-                    <a href="/"
-                       class="group font-bold text-3xl flex items-center space-x-4 hover:text-emerald-600 transition ">
-                        <x-application-logo
-                            class="w-10 h-10 fill-current text-gray-500 group-hover:text-emerald-500 transition" />
-                        <span>Rastagram</span>
-                    </a>
+<body class="font-sans text-gray-900 antialiased bg-yellow-500"> 
 
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('profile.update') }}"
+<div class="min-h-screen flex flex-col pt-6 sm:pt-0 overflow-x-hidden">
+    <nav class="w-full bg-black">
+        <div class="mx-auto flex justify-between items-center py-2">
+            <a href="/" class="group font-bold text-3xl flex items-center space-x-4 hover:text-green-500 transition">
+                <x-application-logo class="w-10 h-10 fill-current text-gray-500 group-hover:text-green-500 transition" />
+                <span>Rastagram</span>
+            </a>
 
-                    class="font-medium text-gray-600 hover:text-gray-500 transition">{{ Auth::user()->name }}</a>
-                </div>
-                <div>
-                    <form action="{{ route('logout') }}" method="post">
-                        @csrf
-                        <button type="submit"
-                                class="font-medium text-gray-600 hover:text-gray-500 transition">Déconnexion
-                        </button>
-                    </form>
-
-                </div>
-
-            </nav>
-            <main>
-                {{ $slot }}
-            </main>
-
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('profile.update') }}" class="font-medium text-yellow-600 hover:text-yellow-500 transition">{{ Auth::user()->name }}</a>
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button type="submit" class="font-medium text-yellow-600 hover:text-yellow-500 transition">Déconnexion</button>
+                </form>
+            </div>
         </div>
-    </div>
-</body>
+    </nav>
 
+    <main class="flex-grow w-full">
+        {{ $slot }}
+    </main>
+</div>
+
+</body>
 
 </html>

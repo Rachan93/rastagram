@@ -18,7 +18,6 @@ class ProfileController extends Controller
         // Les articles publiés par l'utilisateur
         $posts = $user
             ->posts()
-           // ->where('published_at', '<', now())
             ->withCount('comments')
             ->orderBy('created_at')
             ->get()

@@ -171,7 +171,7 @@ class PostController extends Controller
             ->orderByDesc('created_at')
 
             ->get();
-
+            //dd($comments);
 
         return view('posts.show', [
 

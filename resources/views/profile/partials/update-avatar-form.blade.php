@@ -1,12 +1,9 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Avatar') }}
-        </h2>
+        
  
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Here you can change your avatar. It will be displayed on your
-                  profile and on your articles.') }}
+            {{ __('Ici, vous pouvez changer votre avatar. Il sera affiché sur votre profil, vos posts et vos commentaires.') }}
         </p>
     </header>
  
@@ -23,15 +20,15 @@
  
                 <div class="mt-1">
                     <input type="file" name="avatar" id="avatar"
-                        class="block w-full shadow-sm sm:text-sm rounded-md/>
+                        class="block w-1/2 shadow-sm sm:text-sm rounded-md"/>
                 </div>
  
                 <x-input-error :messages="$errors->get('avatar')" class="mt-2" />
             </div>
         </div>
  
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex items-center gap-4 ">
+            <x-primary-button class="bg-red-600 hover:bg-red-700">{{ __('Enregistrer') }}</x-primary-button>
  
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"

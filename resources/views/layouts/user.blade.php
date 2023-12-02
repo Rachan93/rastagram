@@ -20,8 +20,8 @@
 <div class="min-h-screen flex flex-col pt-6 sm:pt-0 overflow-x-hidden">
     <nav class="w-full bg-black">
         <div class="mx-auto flex justify-between items-center py-2">
-            <a href="/" class="group font-bold text-3xl flex items-center space-x-4 hover:text-green-500 transition">
-                <x-application-logo class="w-10 h-10 fill-current text-gray-500 group-hover:text-green-500 transition" />
+            <a href="{{ route('posts.index') }}" class="group font-bold text-red-600 text-3xl flex items-center space-x-4 hover:text-green-500 transition">
+                <x-application-logo class="w-10 h-10 fill-current text-red-600 group-hover:text-green-500 transition" />
                 <span>Rastagram</span>
             </a>
 

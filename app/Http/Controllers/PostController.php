@@ -24,96 +24,78 @@ class PostController extends Controller
 
 
 
-
-
-
-
-
      public function index(Request $request)
      {
-         // Get the IDs of followed users
-         $followedUserIds = auth()->user()->following()->pluck('users.id')->toArray();
-     
-         // Fetch all posts with an additional column for like_count and comments
-         $posts = Post::leftJoin('likes', 'posts.id', '=', 'likes.post_id')
-             ->with('comments') // Eager load comments
-             ->select(
-                 'posts.*',
-                 DB::raw('COUNT(likes.id) AS like_count'),
-                 DB::raw('NULL AS user_followed')
-             )
-             ->groupBy('posts.id')
-             ->orderBy('created_at', 'desc')
-             ->get();
-     
-         // Mark posts from followed users
-         foreach ($posts as $post) {
-             $post->user_followed = in_array($post->user_id, $followedUserIds);
-         }
-     
-         // If there is a search term, apply search filters
+         // Récupérer l'utilisateur authentifié
+         $user = auth()->user();
+ 
+         // Récupérer les IDs des utilisateurs suivis par l'utilisateur authentifié
+         $followingIds = $user->following()->pluck('users.id');
+ 
+         // Si un terme de recherche est présent, appliquer les filtres de recherche
          if ($request->has('search')) {
              $searchTerm = $request->query('search');
-             $filteredPosts = $posts->filter(function ($post) use ($searchTerm) {
-                 return stripos($post->description, $searchTerm) !== false
-                     || stripos($post->user->name, $searchTerm) !== false
-                     || stripos($post->localisation, $searchTerm) !== false;
-             });
-     
-             // Sort the filtered posts based on the same ordering logic
-             $filteredPosts = $filteredPosts->sortByDesc(function ($post) use ($followedUserIds) {
-                 return [
-                     $post->user_followed,
-                     $post->user_followed ? $post->created_at : $post->like_count,
-                 ];
-             });
-     
-             // Paginate the filtered and sorted collection using Laravel Paginator
-             $currentPage = Paginator::resolveCurrentPage('page');
-             $perPage = 10;
-     
-             // Use LengthAwarePaginator to create a paginator with the correct total count
-             $paginatedPosts = new LengthAwarePaginator(
-                 $filteredPosts->forPage($currentPage, $perPage),
-                 $filteredPosts->count(),
-                 $perPage,
-                 $currentPage,
-                 ['path' => Paginator::resolveCurrentPath()]
-             );
-     
-             return view('posts.index', [
-                 'posts' => $paginatedPosts,
-             ]);
+ 
+             // Effectuer la recherche dans la base de données pour les posts d'utilisateurs suivis
+             $postsFollowed = Post::whereIn('user_id', $followingIds)
+                 ->where(function ($query) use ($searchTerm) {
+                     $query->whereHas('user', function ($userQuery) use ($searchTerm) {
+                         $userQuery->where('name', 'like', '%' . $searchTerm . '%');
+                     })
+                         ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                         ->orWhere('localisation', 'like', '%' . $searchTerm . '%');
+                 })
+                 ->orderByDesc('updated_at')
+                 ->get();
+ 
+             // Effectuer la recherche dans la base de données pour tous les posts
+             $postsAll = Post::where(function ($query) use ($searchTerm) {
+                 $query->whereHas('user', function ($userQuery) use ($searchTerm) {
+                     $userQuery->where('name', 'like', '%' . $searchTerm . '%');
+                 })
+                     ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                     ->orWhere('localisation', 'like', '%' . $searchTerm . '%');
+             })
+                 ->orderByDesc('updated_at')
+                 ->get();
+         } else {
+             // S'il n'y a pas de terme de recherche, récupérer les messages des utilisateurs suivis
+             $postsFollowed = Post::whereIn('user_id', $followingIds)
+                 ->orderByDesc('updated_at')
+                 ->get();
+ 
+             // Récupérer tous les messages
+             $postsAll = Post::orderByDesc('updated_at')->get();
          }
-     
-         // If there is no search term, continue with the regular index logic
-     
-         // Sort the collection in PHP
-         $sortedPosts = $posts->sortByDesc(function ($post) use ($followedUserIds) {
-             // Order by user_followed and then either created_at or like_count
-             return [
-                 $post->user_followed,
-                 $post->user_followed ? $post->created_at : $post->like_count,
-             ];
+ 
+         // Obtenir le nombre d'abonnés pour chaque utilisateur dans $postsAll
+         $userFollowerCounts = collect($postsAll)->groupBy('user_id')->map->count();
+ 
+         // Trier $postsAll par nombre d'abonnés par ordre décroissant
+         $postsAll = $postsAll->sortByDesc(function ($post) {
+             return $post->likes()->count();
          });
-     
-         // Paginate the sorted collection using Laravel Paginator
-         $currentPage = Paginator::resolveCurrentPage('page');
-         $perPage = 10;
-     
-         // Use LengthAwarePaginator to create a paginator with the correct total count
-         $paginatedPosts = new LengthAwarePaginator(
-             $sortedPosts->forPage($currentPage, $perPage),
-             $sortedPosts->count(),
-             $perPage,
-             $currentPage,
-             ['path' => Paginator::resolveCurrentPath()]
-         );
-     
-         return view('posts.index', [
-             'posts' => $paginatedPosts,
+ 
+         // Fusionner les deux ensembles de messages et supprimer les doublons
+         $mergedPosts = $postsFollowed->merge($postsAll)->unique('id');
+ 
+         // Paginer les messages fusionnés et triés
+         $paginatedPosts = $this->paginateCollection($mergedPosts, 10);
+ 
+         return view('posts.index', ['posts' => $paginatedPosts]);
+     }
+ 
+ // Méthode d'aide pour paginer une collection
+     private function paginateCollection($items, $perPage)
+     {
+         $currentPage = LengthAwarePaginator::resolveCurrentPage();
+         $currentItems = $items->slice(($currentPage - 1) * $perPage, $perPage)->all();
+ 
+         return new LengthAwarePaginator($currentItems, count($items), $perPage, $currentPage, [
+             'path' => LengthAwarePaginator::resolveCurrentPath(),
          ]);
      }
+
      
     //     /**
     //      * Show the form for creating a new resource.
@@ -193,24 +175,24 @@ class PostController extends Controller
     }
 
     public function update(PostUpdateRequest $request, Post $post)
-    {
-        $this->authorize('updatePost', $post);
+{
+    $this->authorize('updatePost', $post);
 
-        $post->description = $request->validated()['description'];
-        $post->localisation = $request->validated()['localisation'];
-        $post->date = $request->validated()['date'];
+    $post->description = $request->validated()['description'];
+    $post->localisation = $request->validated()['localisation'];
+    $post->date = $request->validated()['date'];
 
-        // Check if a new image is provided
-        if ($request->hasFile('image')) {
-            // Store the new image and update the image_url
-            $path = $request->file('image')->store('posts', 'public');
-            $post->image_url = asset('storage/' . $path);
-        }
-
-        $post->save();
-
-        return redirect()->route('posts.index');
+    // Check if a new image is provided
+    if ($request->hasFile('image')) {
+        // Store the new image and update the image_url
+        $path = $request->file('image')->store('posts', 'public');
+        $post->image_url = 'posts/' . basename($path);
     }
+
+    $post->save();
+
+    return redirect()->route('posts.index');
+}
 
     public function addComment(CommentStoreRequest $request, Post $post)
     {

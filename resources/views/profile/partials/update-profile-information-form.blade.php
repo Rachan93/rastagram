@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+            {{ __('Informations de profil') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Changez vos informations de profil et votre adresse e-mail.") }}
         </p>
     </header>
 
@@ -18,14 +18,14 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-input-label for="name" :value="__('Nom')" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 mb-10 block w-full focus:border-2 focus:border-red-600 focus:ring-0 " :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-input-label for="email" :value="__('E-mail')" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 mb-10 block w-full focus:border-2 focus:border-red-600 focus:ring-0 " :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -47,9 +47,9 @@
             @endif
             
             
-        <div class="mb-4" x-data="{ bio: {{ json_encode(old('bio', $user->bio)) }}, remainingCharacters: 255 - {{ strlen(old('bio', $user->bio)) }} }">
+        <div class="mb-10" x-data="{ bio: {{ json_encode(old('bio', $user->bio)) }}, remainingCharacters: 255 - {{ strlen(old('bio', $user->bio)) }} }">
                 
-            <x-input-label for="bio" :value="__('Bio')" />
+            <x-input-label for="bio" :value="__('Biographie')" />
 
                 <textarea
                     x-model="bio"
@@ -57,7 +57,7 @@
                     x-bind:maxlength="255"
                     id="bio"
                     name="bio"
-                    class="mt-1 block w-full border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    class="mt-1 block w-full border rounded-md shadow-sm focus:border-2 focus:border-red-600 focus:ring-0   sm:text-sm"
                     rows="4"
                 ></textarea>
 
@@ -70,7 +70,7 @@
 
         
 <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button class="bg-red-600 hover:bg-red-700">{{ __('Enregistrer') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
                 <p

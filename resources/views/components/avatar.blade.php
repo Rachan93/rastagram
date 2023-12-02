@@ -3,8 +3,8 @@
         <img class=" aspect-square object-cover object-center" src="{{ asset('storage/' . $user->profile_photo) }}"
             alt="{{ $user->name }}" />
     @else
-        <div class="flex items-center justify-center bg-indigo-100">
-            <span class="text-2xl font-medium text-indigo-800">
+        <div class="h-full w-full flex items-center justify-center text-center bg-yellow-300">
+            <span class="font-bold text-3xl font-medium text-red-600">
                 {{ $user->name[0] }}
             </span>
         </div>

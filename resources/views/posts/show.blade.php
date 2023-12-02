@@ -16,31 +16,30 @@
                 </a>
             </div>
 
-            <div class="text-gray-500">
+            <div class="text-gray-500 flex items-center" >
+            <span class="material-icons mr-2">access_time</span>
                 {{ $post->created_at->diffForHumans() }}
             </div>
         </div>
 
         <p class="mb-4">{{ $post->description }}</p>
 
-        <p class="text-gray-700">{{ $post->localisation }}</p>
-        <p class="text-gray-700">{{ $post->date }}</p>
+        <p class="text-gray-700"><span class="material-icons mr-2">place</span>{{ $post->localisation }}</p>
+        <p class="text-gray-700"><span class="material-icons mr-2">calendar_month</span>{{ $post->date }}</p>
 
-        <!-- Display Like Count -->
-        <p>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
-
-        <!-- Like/Unlike Buttons -->
+       
+        <!-- Like/Unlike Buttons + Count -->
         @auth
         @if (!$post->likedBy(auth()->user()))
-        <form action="{{ route('posts.like', $post) }}" method="post">
+        <form action="{{ route('posts.like', $post) }}" method="post" class="flex justify-end">
             @csrf
-            <button type="submit">Like</button>
+            <button type="submit" class="flex items-center ml-2 mt-3 text-gray-600 text-2xl font-bold scale-150 hover:scale-180" >{{ $post->likes->count() }}<span class="material-icons-outlined mx-2 ">thumb_up</span></button>
         </form>
         @else
-        <form action="{{ route('posts.unlike', $post) }}" method="post">
+        <form action="{{ route('posts.unlike', $post) }}" method="post"  class="flex justify-end">
             @csrf
             @method('DELETE')
-            <button type="submit">Unlike</button>
+            <button type="submit" class="flex items-center ml-2 mt-3 text-gray-600 text-2xl font-bold scale-150 hover:scale-180">{{ $post->likes->count() }}<span class="material-icons text-red-500 mx-2">thumb_up</span></button>
         </form>
         @endif
         @endauth
@@ -97,7 +96,7 @@
     </form>
     @else
     <div class="flex bg-white rounded-md  p-4 text-gray-700 justify-between items-center">
-        <span> Vous devez être connecté pour ajouter un comment </span>
+        <span> Vous devez être connecté pour ajouter un commentaire</span>
         <a href="{{ route('login') }}" class="font-bold bg-white text-gray-700 px-4 py-2 rounded ">Se connecter</a>
     </div>
     @endauth

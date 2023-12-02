@@ -46,28 +46,28 @@
                 <p class="text-black mt-1 ">{{ $post->description }}</p>
                 <p class="text-gray-600 text-sm">{{ $post->localisation }}</p>
                 <p class="text-gray-600 text-sm">{{ $post->date }}</p>
-                <p class="text-gray-300 text-sm">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
+                
                 @if($post->comments)
                     <p class="text-gray-300 text-sm">{{ $post->comments->count() }} {{ Str::plural('commentaire', $post->comments->count()) }}</p>
                 @else
                     <p class="text-gray-700 text-sm">0 commentaires</p>
                 @endif
 
-                <!-- Like/Unlike Buttons -->
-                @auth
-                    @if (!$post->likedBy(auth()->user()))
-                        <form action="{{ route('posts.like', $post) }}" method="post">
-                            @csrf
-                            <button type="submit">Like</button>
-                        </form>
-                    @else
-                        <form action="{{ route('posts.unlike', $post) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Unlike</button>
-                        </form>
-                    @endif
-                @endauth
+               <!-- Like/Unlike Buttons + Count -->
+        @auth
+        @if (!$post->likedBy(auth()->user()))
+        <form action="{{ route('posts.like', $post) }}" method="post" class="flex justify-end">
+            @csrf
+            <button type="submit" class="flex items-center ml-2 mt-3 text-gray-600 text-2xl font-bold scale-150 hover:scale-180" >{{ $post->likes->count() }}<span class="material-icons-outlined mx-2 ">thumb_up</span></button>
+        </form>
+        @else
+        <form action="{{ route('posts.unlike', $post) }}" method="post"  class="flex justify-end">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="flex items-center ml-2 mt-3 text-gray-600 text-2xl font-bold scale-150 hover:scale-180">{{ $post->likes->count() }}<span class="material-icons text-red-500 mx-2">thumb_up</span></button>
+        </form>
+        @endif
+        @endauth
             </a>
         </li>
     @endforeach

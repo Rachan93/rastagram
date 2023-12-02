@@ -10,6 +10,7 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
+   <!-- <link href="../../../node_modules/material-icons/iconfont/ material-icons.css" rel="stylesheet"> -->
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

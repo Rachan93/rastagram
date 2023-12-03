@@ -14,7 +14,7 @@ class FollowerSeeder extends Seeder
     public function run(): void
     {
         Follower::factory()
-        ->count(250)
+        ->count(15)
         ->create();
     }
 }

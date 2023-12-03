@@ -21,11 +21,11 @@ class PostUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        // If you want to allow updating an image, you can use 'nullable' for the image_url field
+        
         return [
             'description' => 'required|max:50',
             'localisation' => 'nullable|string|max:50',
-            'image' => 'nullable|image|max:2048', // Assuming you are using 'image' rule for image validation
+            'image' => 'nullable|image|max:2048', 
             'date' => 'nullable|date',
         ];
     }

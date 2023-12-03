@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use App\Models\Follower;
 
-
 class FollowerFactory extends Factory
 {
     /**
@@ -25,7 +24,8 @@ class FollowerFactory extends Factory
     {
         return [
             'follower_id' => User::all()->random()->id,
-            'followed_id' => User::all()->random()->id,
+            'user_id' => User::all()->random()->id,
         ];
     }
 }
+

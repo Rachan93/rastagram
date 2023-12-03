@@ -177,7 +177,7 @@ class PostController extends Controller
     // Ajoute un "j'aime" à la ressource spécifiée.
     public function like(Post $post)
     {
-        auth()->user()->likes()->create(['post_id' => $post->id]);
+        auth()->user()->likes()->create(['post_id' => $post->id]);  //likes() est bien défini mais l'analyse statique de code de VSC ne permet pas de le déterminer
 
         return back();
     }

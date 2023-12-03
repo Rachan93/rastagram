@@ -105,7 +105,7 @@ class ProfileController extends Controller
     // Ajoute un utilisateur à la liste des abonnements.
     public function follow(User $user)
     {
-        auth()->user()->following()->attach($user);
+        auth()->user()->following()->attach($user); //following() est bien défini mais l'analyse statique de code de VSC ne permet pas de le déterminer
 
         return back();
     }

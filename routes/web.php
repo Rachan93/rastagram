@@ -6,7 +6,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Homepage
-Route::get('/', [HomepageController::class, 'index']);
+Route::get('/', [HomepageController::class, 'index'])->name('homepage');
+
 
 // Posts
 Route::middleware(['auth'])->group(function () {

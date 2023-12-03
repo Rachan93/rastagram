@@ -19,7 +19,7 @@
 
         <div>
             <x-input-label for="name" :value="__('Nom')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 mb-10 block w-full focus:border-2 focus:border-red-600 focus:ring-0 " :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 mb-10 block w-full focus:border-2 focus:border-red-600 focus:ring-0 " :value="old('name', $user->name)" required autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
@@ -69,18 +69,25 @@
 
 
         
-<div class="flex items-center gap-4">
-            <x-primary-button class="bg-red-600 hover:bg-red-700">{{ __('Enregistrer') }}</x-primary-button>
+        <div class="flex justify-between items-center gap-4">
+    <x-primary-button class="bg-red-600 hover:bg-red-700">{{ __('Enregistrer') }}</x-primary-button>
 
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
-        </div>
+
+    @if (session('status') === 'profile-updated')
+        <p
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition
+            x-init="setTimeout(() => show = false, 2000)"
+            class="text-sm text-gray-600"
+        >{{ __('Enregistré.') }}</p>
+    @endif
+    
+    <a href="{{ route('profile.show', auth()->user()) }}" class="text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-md">
+        {{ __('Retour au profil') }}
+    </a>
+   
+</div>
+
     </form>
 </section>

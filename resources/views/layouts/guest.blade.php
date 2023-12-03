@@ -15,30 +15,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased bg-lime-700">
-    <div class="min-h-screen flex flex-col pt-6 sm:pt-0 bg-gray-100>
-        <div class="container mx-auto flex flex-col space-y-10">
-            <nav class="flex justify-between items-center py-2">
-                <div>
-                    <a href="/" class="group font-bold text-3xl flex items-center space-x-4 hover:text-emerald-600 transition ">
-                        <x-application-logo class="w-10 h-10 fill-current text-gray-500 group-hover:text-emerald-500 transition" />
-                        <span>Rastagram</span>
-                    </a>
-                </div>
+<body class="font-sans text-gray-900 antialiased bg-yellow-500">
+
+    <div class="min-h-screen flex flex-col pt-6 sm:pt-0 overflow-x-hidden">
+        <nav class="w-full bg-black">
+            <div class="mx-auto flex justify-between items-center py-2">
+                <a href="{{ route('homepage') }}" class="group font-bold text-red-600 text-3xl flex items-center space-x-0 hover:text-green-500 transition">
+                    <x-application-logo/>
+                    <span class="w-10  text-4xl text-red-600 group-hover:text-green-500 transition ml-16 hover:text-green-500 transition">Rastagram</span>
+                </a>
 
                 <!-- Move the navigation links to the right -->
-                <div class="flex end space-x-4 ml-auto">
-                    <a href="{{ route('login') }}" class="font-medium text-gray-600 hover:text-gray-500 transition">Login</a>
-                    <a href="{{ route('register') }}" class="font-medium text-gray-600 hover:text-gray-500 transition">Register</a>
+                <div class="flex items-center space-x-4 mr-10">
+                    <a href="{{ route('login') }}" class="font-medium text-white hover:bg-red-700 transition px-4 py-2 bg-red-600 rounded-md">Connexion</a>
+                    <a href="{{ route('register') }}" class="font-medium text-white hover:bg-green-600 transition px-4 py-2 bg-green-500 rounded-md">Inscription</a>
                 </div>
-            </nav>
+            </div>
+        </nav>
 
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+        <main class="flex-grow w-full">
+            {{ $slot }}
+        </main>
     </div>
-</body>
 
+</body>
 
 </html>

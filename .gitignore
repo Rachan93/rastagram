@@ -17,7 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/storage/*
+# /storage/*
 !/storage/app/
 /storage/app/*
 !/storage/app/public/

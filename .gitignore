@@ -23,5 +23,3 @@ yarn-error.log
 !/storage/app/public/
 /storage/app/public/*
 !/storage/app/public/placeholders/
-
-

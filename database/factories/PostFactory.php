@@ -25,8 +25,6 @@ class PostFactory extends Factory
             'placeholders/placeholder4.png',
             'placeholders/placeholder5.gif',
             'placeholders/placeholder6.gif',
-            'placeholders/placeholder7.jpg',
-
         ];
 
         return [
